@@ -1,0 +1,95 @@
+//Implement Binary tree
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *left;
+    struct node *right;
+} *root,*n;
+
+struct node* create(int num) {
+    n = (struct node*)malloc(sizeof(struct node));
+    n->data = num;
+    n->left = NULL;
+    n->right = NULL;
+    
+    if (root == NULL) {
+        root = n;
+    }
+    
+    return n;
+}
+
+void inordertrav(struct node *root) {
+    if (root != NULL) {
+        inordertrav(root->left);
+        printf("%d ", root->data);
+        inordertrav(root->right);
+    }
+}
+
+void preordertrav(struct node *root){
+	if (root != NULL) {
+		printf("%d ", root->data);
+		preordertrav(root->left);
+		preordertrav(root->right);
+	}
+}
+
+void postordertrav(struct node *root){
+	if (root != NULL) {
+		postordertrav(root->left);
+		postordertrav(root->right);
+		printf("%d ", root->data);
+	}
+}
+
+int height(struct node* root) {
+    if (root == NULL) {
+        return 0;
+    } else {
+        int leftHeight = height(root->left);
+        int rightHeight = height(root->right);
+
+        return (leftHeight > rightHeight) ? (leftHeight + 1) : (rightHeight + 1);
+    }
+}
+
+void wlevel(struct node* root, int level) {
+    if (root == NULL) {
+        return;
+    }
+    if (level == 1) {
+        printf("%d ",root->data);
+    } else if (level > 1) {
+        wlevel(root->left, level - 1);
+        wlevel(root->right, level - 1);
+    }
+}
+
+void leveltrav(struct node *root){
+	int h = height(root);
+	for (int i = 1;i <= h; i++){
+		wlevel(root,i);
+	}
+	
+}
+
+
+int main() {
+    printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    root = create(1);
+    root->left = create(2);
+    root->right = create(3);
+    root->left->left = create(4);
+    root->left->right = create(5);
+    root->left->left->left = create(8);
+    root->right->left = create(6);
+    root->right->right = create(7);
+    root->right->left->left = create(9);
+    root->right->left->right = create(10);
+    
+    leveltrav(root);
+    return 0;
+}

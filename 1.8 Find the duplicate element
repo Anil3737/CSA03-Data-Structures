@@ -1,0 +1,28 @@
+//Find duplicate elements
+#include<stdio.h>
+
+int main(){
+	printf("Name: Philip Gracian Sanova\nReg No:192324023\n");
+	int n,i,j;
+	printf("Enter the size of array :");
+	scanf("%d",&n);  
+	int arr[n];
+	printf("\nEnter elements of array :");
+	for(i=0;i<n;i++){
+		scanf("%d",&arr[i]);
+	}
+    for(i=0;i<n;i++){
+    	int temp=1;
+    	for(j=i+1;j<n;j++){
+    		if(arr[i]==arr[j]&&arr[i]!='\0'){
+    			temp++;
+    			arr[j]='\0';
+			}
+			
+		}
+		if(temp>1){
+			printf("%d appears %d times in this array\n",arr[i],temp);	
+		}
+	}
+	return 0;
+}

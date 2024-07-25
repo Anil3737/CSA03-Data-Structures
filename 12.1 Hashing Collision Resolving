@@ -1,0 +1,131 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define SIZE 10
+
+struct Node {
+    int key;
+    char data[20];
+    struct Node* next;
+};
+
+struct HashTable {
+    struct Node* table[SIZE];
+};
+
+struct Node* createNode(int key, const char* data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode) {
+        newNode->key = key;
+        strcpy(newNode->data, data);
+        newNode->next = NULL;
+    }
+    return newNode;
+}
+
+struct HashTable* createHashTable() {
+    struct HashTable* hashTable = (struct HashTable*)malloc(sizeof(struct HashTable));
+    if (hashTable) {
+        for (int i = 0; i < SIZE; i++) {
+            hashTable->table[i] = NULL;
+        }
+    }
+    return hashTable;
+}
+
+int hashFunction(int key) {
+    return key % SIZE;
+}
+
+void insertSeparateChaining(struct HashTable* hashTable, int key, const char* data) {
+    int index = hashFunction(key);
+    struct Node* newNode = createNode(key, data);
+    if (hashTable->table[index] == NULL) {
+        hashTable->table[index] = newNode;
+    } else {
+        struct Node* current = hashTable->table[index];
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+}
+
+void insertLinearProbing(struct HashTable* hashTable, int key, const char* data) {
+    int index = hashFunction(key);
+    while (hashTable->table[index] != NULL) {
+        index = (index + 1) % SIZE;
+    }
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode) {
+        newNode->key = key;
+        strcpy(newNode->data, data);
+        hashTable->table[index] = newNode;
+    }
+}
+
+void insertQuadraticProbing(struct HashTable* hashTable, int key, const char* data) {
+    int index = hashFunction(key);
+    int i = 1;
+    while (hashTable->table[index] != NULL) {
+        index = (index + i * i) % SIZE;
+        i++;
+    }
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode) {
+        newNode->key = key;
+        strcpy(newNode->data, data);
+        hashTable->table[index] = newNode;
+    }
+}
+
+int secondaryHashFunction(int key) {
+    return 7 - (key % 7);  
+}
+
+void insertDoubleHashing(struct HashTable* hashTable, int key, const char* data) {
+    int index = hashFunction(key);
+    int step = secondaryHashFunction(key);
+    while (hashTable->table[index] != NULL) {
+        index = (index + step) % SIZE;
+    }
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode) {
+        newNode->key = key;
+        strcpy(newNode->data, data);
+        hashTable->table[index] = newNode;
+    }
+}
+
+void printHashTable(struct HashTable* hashTable) {
+    for (int i = 0; i < SIZE; i++) {
+        struct Node* current = hashTable->table[i];
+        printf("Index %d:", i);
+        while (current != NULL) {
+            printf(" (%d, %s)", current->key, current->data);
+            current = current->next;
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+	printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+	
+    struct HashTable* hashTable = createHashTable();
+
+    insertSeparateChaining(hashTable, 12, "John");
+    insertSeparateChaining(hashTable, 23, "Doe");
+    insertSeparateChaining(hashTable, 34, "Alice");
+    insertSeparateChaining(hashTable, 44, "Bob");
+    insertSeparateChaining(hashTable, 56, "Charlie");
+    insertSeparateChaining(hashTable, 69, "Eve");
+    insertSeparateChaining(hashTable, 79, "Frank");
+
+    printHashTable(hashTable);
+
+    free(hashTable);
+
+    return 0;
+}

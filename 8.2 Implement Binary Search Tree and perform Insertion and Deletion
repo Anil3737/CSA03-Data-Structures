@@ -1,0 +1,145 @@
+//Implement Binary Search Tree and perform Insertion and Deletion
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *left;
+    struct node *right;
+} *n;
+
+struct node* insert(struct node *root,int num) {
+    n = (struct node*)malloc(sizeof(struct node));
+    n->data = num;
+    n->left = NULL;
+    n->right = NULL;
+    
+    if (root == NULL) {
+        root = n;
+    }else{
+    	if(num < root->data){
+    		root->left = insert(root->left, num);
+		}else if(num > root->data){
+			root->right = insert(root->right, num);
+		}
+	}
+	return root;
+    
+}
+
+void inordertrav(struct node *root) {
+    if (root != NULL) {
+        inordertrav(root->left);
+        printf("%d ", root->data);
+        inordertrav(root->right);
+    }
+}
+
+void preordertrav(struct node *root){
+	if (root != NULL) {
+		printf("%d ", root->data);
+		preordertrav(root->left);
+		preordertrav(root->right);
+	}
+}
+
+void postordertrav(struct node *root){
+	if (root != NULL) {
+		postordertrav(root->left);
+		postordertrav(root->right);
+		printf("%d ", root->data);
+	}
+}
+
+int height(struct node* root) {
+    if (root == NULL) {
+        return 0;
+    } else {
+        int leftHeight = height(root->left);
+        int rightHeight = height(root->right);
+
+        return (leftHeight > rightHeight) ? (leftHeight + 1) : (rightHeight + 1);
+    }
+}
+
+void wlevel(struct node* root, int level) {
+    if (root == NULL) {
+        return;
+    }
+    if (level == 1) {
+        printf("%d ",root->data);
+    } else if (level > 1) {
+        wlevel(root->left, level - 1);
+        wlevel(root->right, level - 1);
+    }
+}
+
+void leveltrav(struct node *root){
+	int h = height(root);
+	for (int i = 1;i <= h; i++){
+		wlevel(root,i);
+	}
+	
+}
+struct node* minvalnode(struct node* node) {
+    struct node* current = node;
+
+    while (current->left != NULL) {
+        current = current->left;
+    }
+    return current;
+}
+struct node* delfind(struct node *root, int num) {
+    if (root == NULL) {
+        return NULL;
+    }
+
+    if (num < root->data) {
+        root->left = delfind(root->left, num);
+    } else if (num > root->data) {
+        root->right = delfind(root->right, num);
+    } else {
+       
+        if (root->left == NULL) {
+            struct node *temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct node *temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        struct node *temp = minvalnode(root->right);
+
+        root->data = temp->data;
+
+        root->right = delfind(root->right, temp->data);
+    }
+    return root;
+}
+
+void deletion(struct node *root,int num){
+	root = delfind(root,num);
+}
+
+
+int main() {
+    printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    struct node *root=NULL;
+    root = insert(root,10);
+    root = insert(root,12);
+    root = insert(root,5);
+    root = insert(root,4);
+    root = insert(root,20);
+    root = insert(root,8);
+	root = insert(root,7);
+    root = insert(root,15);
+    root = insert(root,13);
+    
+    leveltrav(root);
+    printf("\n");
+    deletion(root,4);
+    leveltrav(root);
+    return 0;
+}

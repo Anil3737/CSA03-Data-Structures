@@ -1,0 +1,163 @@
+//Implement Singly CLL with following operations
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        fprintf(stderr, "Memory allocation failed\n");
+        exit(EXIT_FAILURE);
+    }
+    newNode->data = data;
+    newNode->next = newNode;
+    return newNode;
+}
+
+void insertBeg(struct Node **head, int data) {
+    struct Node *newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        newNode->next = (*head)->next;
+        (*head)->next = newNode;
+    }
+}
+
+void insertEnd(struct Node **head, int data) {
+    struct Node *newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        newNode->next = (*head)->next;
+        (*head)->next = newNode;
+        *head = newNode;
+    }
+}
+
+void insertMid(struct Node *head, int data, int position) {
+    struct Node *newNode = createNode(data);
+    struct Node *temp = head;
+    for (int i = 1; i < position - 1; ++i) {
+        temp = temp->next;
+        if (temp == head) {
+            fprintf(stderr, "Invalid position for insertion\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    newNode->next = temp->next;
+    temp->next = newNode;
+}
+
+void deleteBeg(struct Node **head) {
+    if (*head == NULL) {
+        return;
+    }
+    struct Node *temp = (*head)->next;
+    if (temp == *head) {
+        free(*head);
+        *head = NULL;
+    } else {
+        (*head)->next = temp->next;
+        free(temp);
+    }
+}
+
+void deleteEnd(struct Node **head) {
+    if (*head == NULL) {
+        return;
+    }
+    struct Node *temp = *head;
+    while (temp->next != *head) {
+        temp = temp->next;
+    }
+    if (temp == *head) {
+        free(*head);
+        *head = NULL;
+    } else {
+        temp->next = (*head)->next;
+        free(*head);
+        *head = temp;
+    }
+}
+
+void deleteMid(struct Node *head, int position) {
+    struct Node *temp = head;
+    for (int i = 1; i < position - 1; ++i) {
+        temp = temp->next;
+        if (temp == head) {
+            fprintf(stderr, "Invalid position for deletion\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    struct Node *toBeDeleted = temp->next;
+    temp->next = toBeDeleted->next;
+    free(toBeDeleted);
+}
+
+int search(struct Node *head, int key) {
+    struct Node *temp = head;
+    do {
+        if (temp->data == key) {
+            return 1; 
+        }
+        temp = temp->next;
+    } while (temp != head);
+    return 0; 
+}
+
+void display(struct Node *head) {
+    if (head == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    struct Node *temp = head->next;
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("\n");
+}
+
+int main() {
+    struct Node *head = NULL;
+
+    insertBeg(&head, 3);
+    insertBeg(&head, 2);
+    insertBeg(&head, 1);
+
+    insertEnd(&head, 4);
+    insertEnd(&head, 5);
+
+    printf("Original List: ");
+    display(head);
+
+    insertMid(head, 10, 3);
+    printf("List after inserting 10 at position 3: ");
+    display(head);
+
+    deleteBeg(&head);
+    printf("List after deleting from beginning: ");
+    display(head);
+
+    deleteEnd(&head);
+    printf("List after deleting from end: ");
+    display(head);
+
+    deleteMid(head, 2);
+    printf("List after deleting from position 2: ");
+    display(head);
+
+    int key = 2;
+    if (search(head, key)) {
+        printf("%d found in the list.\n", key);
+    } else {
+        printf("%d not found in the list.\n", key);
+    }
+
+    return 0;
+}

@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+void swap(int *a,int *b){
+	int temp;
+	temp=*a;
+	*a=*b;
+	*b=temp;
+	return;
+}
+void bubble(int arr[],int size){
+	int i,j;
+	for(i=0;i<size-1;i++){
+		for(j=0;j<size-1-i;j++){
+			if(arr[j]>arr[j+1]){
+				swap(&arr[j],&arr[j+1]);
+			}
+		}
+	}
+	return;
+}
+int main() {
+	printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    int n,i;
+    printf("Enter the size of the array: ");
+    scanf("%d",&n);
+    int arr[n];
+    printf("\nEnter the array elements: ");
+    for(i=0;i<n;i++){
+    	scanf("%d",&arr[i]);
+	}
+    bubble(arr,n);
+    printf("\nAfter Bubble Sort\n");
+    for(i=0;i<n;i++){
+    	printf("%d ",arr[i]);
+	}
+	return 0;
+}

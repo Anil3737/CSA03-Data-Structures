@@ -1,0 +1,22 @@
+//Insert an element in an array
+#include<stdio.h>
+
+int main(){
+	printf("Name: Philip Gracian Sanova\nReg No:192324023\n");
+	int array[50],index,i,n,t;
+    printf("Enter number of elements in the array:");
+    scanf("%d",&n);
+    printf("\nEnter the elements of the array:");
+    for (i=0;i<n;i++)    
+        scanf("%d",&array[i]);
+    printf("\nPlease enter the index and the number you want to insert:");
+    scanf("%d %d",&index,&t);
+    for(i=n-1;i>=index-1;i--)    
+        array[i+1]=array[i];
+    array[index-1]=t;
+    printf("\nResultant array is\n");
+    for(i=0;i<=n;i++)    
+        printf("%d ",array[i]);    
+    
+    return 0;
+}

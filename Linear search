@@ -1,0 +1,28 @@
+//Linear Search of array
+#include <stdio.h>
+int search(int array[],int size,int target){
+	for(int i=0;i<size;i++){
+		if(array[i]==target){
+			printf("\nElement is found in the array");
+			return 0;
+		}
+	}
+	printf("\nElement is not found in the array");
+	return 0;
+}
+int main() {
+    printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    int n;
+    printf("Enter array size: ");
+    scanf("%d", &n);
+    int array[n];
+    printf("\nEnter array elemetns:");
+    for(int i=0;i<n;i++){
+    	scanf("%d",&array[i]);
+	}
+	int t;
+	printf("\nEnter target element:");
+	scanf("%d",&t);
+	search(array,n,t);
+    return 0;
+}

@@ -1,0 +1,115 @@
+//Implement Queue using array with following operations
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define MAX_SIZE 100
+
+int rear, front;
+int array[MAX_SIZE];
+
+void enqueue(int num, int a[], int size) {
+    if (rear == size - 1) {
+        printf("\nOverflow");
+        return;
+    } else if (rear == -1) {
+        rear = front = 0;
+        a[rear] = num;
+    } else {
+        rear++;
+        a[rear] = num;
+    }
+}
+
+void dequeue(int a[]) {
+    if (front == -1) {
+        printf("\nUnderflow");
+        return;
+    } else if (front == rear) {
+        printf("\nDeleted %d from queue", a[front]);
+        rear = front = -1;
+    } else {
+        printf("\nDeleted %d from queue", a[front]);
+        front++;
+    }
+}
+
+void display(int a[]) {
+    int i;
+    if (front == -1) {
+        printf("\nQueue is Empty");
+        return;
+    }
+    for (i = front; i <= rear; i++) {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+}
+
+int len(char *string) {
+    int size = 1;
+    while (*string) {
+        if (*string == '\0') {
+            size = 0;
+            return size;
+        } else if (*string == ' ' || *string == ',') {
+            size++;
+        }
+        string++;
+    }
+    return size;
+}
+
+void check(char *string, int size) {
+    int operand;
+
+    while (*string) {
+        if (isdigit(*string)) {
+            operand = 0;
+            while (isdigit(*string)) {
+                operand = operand * 10 + (*string - '0');
+                string++;
+            }
+            enqueue(operand, array, size);
+        } else if (*string == ' ' || *string == ',') {
+            string++;
+        } else {
+            printf("\nInvalid characters");
+            exit(0);
+        }
+    }
+}
+
+void peek(int a[]){
+	if(front==-1){
+		printf("\nis Empty");
+		return;
+	}else{
+		printf("%d\n",a[front]);
+	}
+}
+
+void rearpeek(int a[]){
+	if(rear==-1){
+		printf("\nis Empty");
+		return;
+	}else{
+		printf("%d\n",a[rear]);
+	}
+}
+
+int main() {
+    printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+	rear=front=-1;
+    printf("Enter queue elements: ");
+    char string[MAX_SIZE];
+    scanf(" %[^\n]", string);
+    int length = len(string);
+    check(string, length);
+
+    printf("\nQueue : ");
+    display(array);
+
+
+    return 0;
+}

@@ -1,0 +1,19 @@
+//Find Fibbonacci series upto n numbers
+#include <stdio.h>
+int main() {
+    printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    int n;
+    printf("Enter the number of terms for Fibonacci series: ");
+    scanf("%d", &n);
+    int n1=0,n2=1,term;
+    printf("Fibonacci Series up to %d terms:\n", n);
+    printf("%d, %d, ",n1, n2);
+    for (int i = 3; i <= n; ++i) {
+        term=n1+n2;
+        printf("%d, ",term);
+        n1=n2;
+        n2=term;
+    }
+    printf("\n");
+    return 0;
+}

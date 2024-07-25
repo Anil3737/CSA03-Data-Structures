@@ -1,0 +1,106 @@
+// Consider 2 stacks, add bottom most element and top most element print the value
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 100
+
+struct Stack {
+    int arr[MAX_SIZE];
+    int top;
+};
+
+void initialize(struct Stack *stack) {
+    stack->top = -1;
+}
+
+int isEmpty(struct Stack *stack) {
+    return stack->top == -1;
+}
+
+int isFull(struct Stack *stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+void push(struct Stack *stack, int data) {
+    if (isFull(stack)) {
+        fprintf(stderr, "Stack overflow\n");
+        exit(EXIT_FAILURE);
+    }
+    stack->arr[++stack->top] = data;
+}
+
+int pop(struct Stack *stack) {
+    if (isEmpty(stack)) {
+        fprintf(stderr, "Stack underflow\n");
+        exit(EXIT_FAILURE);
+    }
+    return stack->arr[stack->top--];
+}
+
+void addBottom(struct Stack *stack, int data) {
+    if (isFull(stack)) {
+        fprintf(stderr, "Stack overflow\n");
+        exit(EXIT_FAILURE);
+    }
+
+    struct Stack tempStack;
+    initialize(&tempStack);
+    while (!isEmpty(stack)) {
+        push(&tempStack, pop(stack));
+    }
+
+    push(stack, data);
+
+    while (!isEmpty(&tempStack)) {
+        push(stack, pop(&tempStack));
+    }
+}
+
+int getTop(struct Stack *stack) {
+    if (isEmpty(stack)) {
+        fprintf(stderr, "Stack is empty\n");
+        exit(EXIT_FAILURE);
+    }
+    return stack->arr[stack->top];
+}
+
+int getBottom(struct Stack *stack) {
+    if (isEmpty(stack)) {
+        fprintf(stderr, "Stack is empty\n");
+        exit(EXIT_FAILURE);
+    }
+    return stack->arr[0];
+}
+
+int main() {
+	printf("Name: Philip Gracian Sanova\nReg no: 192324023");
+    struct Stack stack1, stack2;
+    initialize(&stack1);
+    initialize(&stack2);
+
+    push(&stack1, 1);
+    push(&stack1, 2);
+    push(&stack1, 3);
+
+    push(&stack2, 4);
+    push(&stack2, 5);
+    push(&stack2, 6);
+
+    printf("Top of stack1: %d\n", getTop(&stack1));
+    printf("Bottom of stack1: %d\n", getBottom(&stack1));
+
+    printf("Top of stack2: %d\n", getTop(&stack2));
+    printf("Bottom of stack2: %d\n", getBottom(&stack2));
+
+    addBottom(&stack1, 0);
+    addBottom(&stack2, 9);
+
+    printf("\nAfter adding to the bottom:\n");
+    printf("Top of stack1: %d\n", getTop(&stack1));
+    printf("Bottom of stack1: %d\n", getBottom(&stack1));
+
+    printf("Top of stack2: %d\n", getTop(&stack2));
+    printf("Bottom of stack2: %d\n", getBottom(&stack2));
+
+    return 0;
+}

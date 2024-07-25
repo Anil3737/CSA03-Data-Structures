@@ -1,0 +1,106 @@
+//Implement Queue using Linked List with following operations
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+struct node {
+    int data;
+    struct node *next;
+} *n;
+
+struct queue {
+    struct node *front;
+    struct node *rear;
+};
+
+void initialize(struct queue *queue) {
+    queue->front = NULL;
+    queue->rear = NULL;
+}
+
+void enqueue(struct queue *queue, int num) {
+    n = (struct node *)malloc(sizeof(struct node));
+    n->data = num;
+    n->next = NULL;
+    if (queue->rear == NULL) {
+        queue->rear = queue->front = n;
+    } else {
+        queue->rear->next = n;
+        queue->rear = n;
+    }
+}
+
+void dequeue(struct queue *queue) {
+    struct node *t;
+    if (queue->front == NULL) {
+        printf("\nQueue is Empty");
+        return;
+    } else {
+        t = queue->front;
+        queue->front = queue->front->next;
+        free(t);
+    }
+}
+
+void display(struct queue *queue) {
+    if (queue->front == NULL) {
+        printf("\nQueue is Empty");
+        return;
+    } else {
+    	printf("\nQueue:  ");
+        struct node *t;
+        t = queue->front;
+        while (t != NULL) {
+            printf("%d  ", t->data);
+            t = t->next;
+        }
+    }
+}
+
+void peek(struct queue *queue){
+	if(queue->front == NULL){
+		printf("\nis Empty");
+		return;
+	}else{
+		printf("\n%d ",queue->front->data);
+	}
+}
+
+void rearpeek(struct queue *queue){
+	if(queue->rear == NULL){
+		printf("\nis Empty");
+		return;
+	}else{
+		printf("\n%d ",queue->rear->data);
+	}
+}
+
+void check(char *string,struct queue *q){
+	while(*string){
+		if(isdigit(*string)){
+			int operand = 0;
+			while(isdigit(*string)){
+				operand = operand * 10 + (*string - '0');
+				string++;
+			}enqueue(q,operand);
+		}
+		else{
+			string++;
+		}
+	}
+}
+
+int main() {
+    printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+
+    char string[100];
+    printf("Enter Queue Elements: ");
+    scanf("%[^\n]",string);
+    struct queue q;
+    initialize(&q);
+	check(string,&q);
+	display(&q);
+	peek(&q);
+	rearpeek(&q);
+    return 0;
+}

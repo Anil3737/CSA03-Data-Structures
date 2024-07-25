@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+void Shell(int arr[], int size) {
+    for (int gap = size / 2; gap > 0; gap /= 2) {
+        for (int i = gap; i < size; i++) {
+            int temp = arr[i];
+            int j;
+            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
+                arr[j] = arr[j - gap];
+            }
+            arr[j] = temp;
+        }
+    }
+}
+
+int main() {
+	printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    int n,i;
+    printf("Enter the size of the array: ");
+    scanf("%d",&n);
+    int arr[n];
+    printf("\nEnter the array elements: ");
+    for(i=0;i<n;i++){
+    	scanf("%d",&arr[i]);
+	}
+    Shell(arr,n);
+    printf("\nAfter Shell Sort\n");
+    for(i=0;i<n;i++){
+    	printf("%d ",arr[i]);
+	}
+	return 0;
+}

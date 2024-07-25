@@ -1,0 +1,157 @@
+//Implement DLL with following operations
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *prev;
+    struct Node *next;
+};
+
+struct Node *createNode(int data) {
+    struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed\n");
+        exit(0);
+    }
+    newNode->data = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertBeg(struct Node **head, int data) {
+    struct Node *newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        newNode->next = *head;
+        (*head)->prev = newNode;
+        *head = newNode;
+    }
+}
+
+void insertEnd(struct Node **head, int data) {
+    struct Node *newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        struct Node *temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->prev = temp;
+    }
+}
+
+void deleteBeg(struct Node **head) {
+    if (*head == NULL) {
+        return;
+    }
+    struct Node *temp = *head;
+    *head = temp->next;
+    if (*head != NULL) {
+        (*head)->prev = NULL;
+    }
+    free(temp);
+}
+
+void deleteEnd(struct Node **head) {
+    if (*head == NULL) {
+        return;
+    }
+    struct Node *temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    if (temp->prev != NULL) {
+        temp->prev->next = NULL;
+    } else {
+        *head = NULL;
+    }
+    free(temp);
+}
+
+int search(struct Node *head, int key) {
+    struct Node *temp = head;
+    while (temp != NULL) {
+        if (temp->data == key) {
+            return 1; 
+        }
+        temp = temp->next;
+    }
+    return 0; 
+}
+
+void sort(struct Node **head) {
+
+}
+
+int findMax(struct Node *head) {
+    if (head == NULL) {
+        printf("Empty list\n");
+        exit(0);
+    }
+    int max = head->data;
+    struct Node *temp = head->next;
+    while (temp != NULL) {
+        if (temp->data > max) {
+            max = temp->data;
+        }
+        temp = temp->next;
+    }
+    return max;
+}
+
+int findMin(struct Node *head) {
+    if (head == NULL) {
+        printf("Empty list\n");
+        exit(0);
+    }
+    int min = head->data;
+    struct Node *temp = head->next;
+    while (temp != NULL) {
+        if (temp->data < min) {
+            min = temp->data;
+        }
+        temp = temp->next;
+    }
+    return min;
+}
+
+void display(struct Node *head) {
+    struct Node *temp = head;
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+	printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    struct Node *head = NULL;
+    insertBeg(&head, 3);
+    insertBeg(&head, 2);
+    insertBeg(&head, 1);
+    insertEnd(&head, 4);
+    insertEnd(&head, 5);
+    printf("Original List: ");
+    display(head);
+    deleteBeg(&head);
+    printf("List after deleting from beginning: ");
+    display(head);
+    deleteEnd(&head);
+    printf("List after deleting from end: ");
+    display(head);
+    int key = 2;
+    if (search(head, key)) {
+        printf("%d found in the list.\n", key);
+    } else {
+        printf("%d not found in the list.\n", key);
+    }
+    printf("Maximum element in the list: %d\n", findMax(head));
+    printf("Minimum element in the list: %d\n", findMin(head));
+    return 0;
+}

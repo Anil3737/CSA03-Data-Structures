@@ -1,0 +1,181 @@
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+struct node {
+    int data;
+    struct node* left;
+    struct node* right;
+    int height;
+} * n;
+
+int getheight(struct node* root) {
+    if (root == NULL)
+        return 0;
+    return root->height;
+}
+
+int updateheight(struct node* root) {
+    if (root == NULL)
+        return 0;
+    int leftheight = getheight(root->left);
+    int rightheight = getheight(root->right);
+    return (leftheight > rightheight) ? leftheight + 1 : rightheight + 1;
+}
+
+struct node* rRotation(struct node* root) {
+    struct node* x = root->left;
+    struct node* y = x->right;
+
+    x->right = root;
+    root->left = y;
+
+    x->height = updateheight(x);
+    root->height = updateheight(root);
+
+    return x;
+}
+
+struct node* lRotation(struct node* root) {
+    struct node* x = root->right;
+    struct node* y = x->left;
+
+    x->left = root;
+    root->right = y;
+
+    x->height = updateheight(x);
+    root->height = updateheight(root);
+
+    return x;
+}
+
+int checkBalance(struct node* root) {
+    if (root == NULL)
+        return 0;
+    return (getheight(root->left) - getheight(root->right));
+}
+
+struct node* insert(struct node* root, int num) {
+    n = (struct node*)malloc(sizeof(struct node));
+    n->data = num;
+    n->left = NULL;
+    n->right = NULL;
+    n->height = 1;
+    if (root == NULL) {
+        root = n;
+        return n;
+    } else {
+        if (num < root->data) {
+            root->left = insert(root->left, num);
+        } else if (num > root->data) {
+            root->right = insert(root->right, num);
+        } else {
+            return root;
+        }
+    }
+    root->height = updateheight(root);
+    int balance = checkBalance(root);
+
+    if (balance > 1) {
+        if (num < root->left->data) {
+            return rRotation(root);
+        } else {
+            root->left = lRotation(root->left);
+            return rRotation(root);
+        }
+    } else if (balance < -1) {
+        if (num < root->right->data) {
+            return lRotation(root);
+        } else {
+            root->right = rRotation(root->right);
+            return lRotation(root);
+        }
+    }
+    return root;
+}
+
+struct node* minvalnode(struct node* node) {
+    struct node* current = node;
+
+    while (current->left != NULL) {
+        current = current->left;
+    }
+    return current;
+}
+
+struct node* delfind(struct node* root, int num) {
+    if (root == NULL) {
+        return NULL;
+    }
+
+    if (num < root->data) {
+        root->left = delfind(root->left, num);
+    } else if (num > root->data) {
+        root->right = delfind(root->right, num);
+    } else {
+
+        if (root->left == NULL) {
+            struct node* temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct node* temp = root->left;
+            free(root);
+            return temp;
+        }
+
+        struct node* temp = minvalnode(root->right);
+
+        root->data = temp->data;
+
+        root->right = delfind(root->right, temp->data);
+    }
+    return root;
+}
+
+void deletion(struct node* root, int num) {
+    root = delfind(root, num);
+
+    root->height = updateheight(root);
+    int balance = checkBalance(root);
+
+    if (balance > 1) {
+        if (num < root->left->data) {
+            return rRotation(root);
+        } else {
+            root->left = lRotation(root->left);
+            return rRotation(root);
+        }
+    } else if (balance < -1) {
+        if (num < root->right->data) {
+            return lRotation(root);
+        } else {
+            root->right = rRotation(root->right);
+            return lRotation(root);
+        }
+    }
+    return root;
+}
+
+void inorderTraverse(struct node* root) {
+    if (root != NULL) {
+        inorderTraverse(root->left);
+        printf("%d ", root->data);
+        inorderTraverse(root->right);
+    }
+}
+
+int main() {
+    printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    struct node* root = NULL;
+    int array[] = {16, 15, 14, 13, 12, 11, 10, 8, 9};
+    for (int i = 0; i < 9; i++) {
+        root = insert(root, array[i]);
+    }
+    printf("\n");
+    inorderTraverse(root);
+    deletion(root, 11);
+    printf("\n\nAfter Deletion\n");
+    inorderTraverse(root);
+    return 0;
+}

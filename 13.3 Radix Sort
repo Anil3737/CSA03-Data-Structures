@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+int getMax(int arr[], int size) {
+    int max = arr[0];
+    for (int i = 1; i < size; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+void countingSort(int arr[], int size, int exp) {
+    const int radix = 10;
+    int output[size];
+    int count[10] = {0};
+	for (int i = 0; i < size; i++) {
+        count[(arr[i] / exp) % radix]++;
+    }for (int i = 1; i < radix; i++) {
+        count[i] += count[i - 1];
+    }for (int i = size - 1; i >= 0; i--) {
+        output[count[(arr[i] / exp) % radix] - 1] = arr[i];
+        count[(arr[i] / exp) % radix]--;
+    }for (int i = 0; i < size; i++) {
+        arr[i] = output[i];
+    }
+}
+void Radix(int arr[], int size) {
+    int max = getMax(arr, size);
+
+    for (int exp = 1; max / exp > 0; exp *= 10) {
+        countingSort(arr, size, exp);
+    }
+}
+int main() {
+	printf("Name: Philip Gracian Sanova\nReg no: 192324023\n");
+    int n,i;
+    printf("Enter the size of the array: ");
+    scanf("%d",&n);
+    int arr[n];
+    printf("\nEnter the array elements: ");
+    for(i=0;i<n;i++){
+    	scanf("%d",&arr[i]);
+	}
+    Radix(arr,n);
+    printf("\nAfter Radix Sort\n");
+    for(i=0;i<n;i++){
+    	printf("%d ",arr[i]);
+	}
+	return 0;
+}
